@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { SeatMapper } from './SeatMapper';
 import * as mammoth from 'mammoth';
 import * as pdfjsLib from 'pdfjs-dist';
-import { CheckCircle2, Circle, Plus, Trash2, MapPin, X, Loader2, Link as LinkIcon, BookOpen, Shield, Users, UserMinus, UserCheck, Bot, Send, Sparkles, Power, Library, Upload, FileText, File as FileIcon } from 'lucide-react';
+import { CheckCircle2, Plus, Trash2, MapPin, X, Loader2, Shield, Users, UserMinus, UserCheck, Bot, Send, Sparkles, Power, Library, Upload, FileText, File as FileIcon } from 'lucide-react';
 
 interface Task {
   id: string;

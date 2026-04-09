@@ -8,7 +8,7 @@ import { SeatMapper } from './components/SeatMapper';
 import { StudyAssistant } from './components/StudyAssistant';
 import { seedDemoSessions } from './lib/seedData';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Users, LogOut, Loader2, Plus, Sparkles, Database, Bell, Shield, AlertTriangle } from 'lucide-react';
+import { MapPin, Users, LogOut, Loader2, Plus, Sparkles, Database, Bell, Shield } from 'lucide-react';
 import './App.css';
 
 function App() {
