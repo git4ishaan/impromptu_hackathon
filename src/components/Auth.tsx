@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { Mail, Lock, User, Loader2, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const Auth: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ export const Auth: React.FC = () => {
           if (profileError) console.error('Profile creation error:', profileError);
         }
         
-        alert('Check your email for the confirmation link!');
+        // No alert needed since email confirmation is disabled
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
@@ -56,7 +57,11 @@ export const Auth: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] w-full max-w-md mx-auto p-4">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="flex flex-col items-center justify-center min-h-[80vh] w-full max-w-md mx-auto p-4"
+    >
       <div className="w-full bg-neutral-800/50 backdrop-blur-xl border border-neutral-700 p-8 rounded-3xl shadow-2xl transition-all duration-300">
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-2">
@@ -68,19 +73,27 @@ export const Auth: React.FC = () => {
         </div>
 
         <form onSubmit={handleAuth} className="space-y-4">
-          {isSignUp && (
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-              <input
-                type="text"
-                placeholder="Full Name"
-                required
-                className="w-full bg-neutral-900 border border-neutral-700 rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            {isSignUp && (
+              <motion.div 
+                key="name"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="relative"
+              >
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  required
+                  className="w-full bg-neutral-900 border border-neutral-700 rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
@@ -107,9 +120,13 @@ export const Auth: React.FC = () => {
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm">
+            <motion.div 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="p-3 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm"
+            >
               {error}
-            </div>
+            </motion.div>
           )}
 
           <button
@@ -137,6 +154,6 @@ export const Auth: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
