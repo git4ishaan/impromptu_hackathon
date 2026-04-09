@@ -13,7 +13,11 @@ interface Session {
   };
 }
 
-export const SessionFeed: React.FC = () => {
+interface SessionFeedProps {
+  onSelectSession: (session: Session) => void;
+}
+
+export const SessionFeed: React.FC<SessionFeedProps> = ({ onSelectSession }) => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -82,6 +86,7 @@ export const SessionFeed: React.FC = () => {
           {sessions.map((session) => (
             <div 
               key={session.id}
+              onClick={() => onSelectSession(session)}
               className="bg-neutral-800/80 backdrop-blur-md border border-neutral-700 p-5 rounded-2xl hover:border-emerald-500/50 transition-all cursor-pointer group flex items-center justify-between"
             >
               <div className="space-y-1">

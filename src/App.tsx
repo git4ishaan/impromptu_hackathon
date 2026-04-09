@@ -3,14 +3,17 @@ import { supabase } from './supabaseClient';
 import { Auth } from './components/Auth';
 import { SessionFeed } from './components/SessionFeed';
 import { CreateSessionModal } from './components/CreateSessionModal';
-import { MapPin, Users, CheckSquare, LogOut, Loader2, Plus } from 'lucide-react';
+import { LiveWorkspace } from './components/LiveWorkspace';
+import { SeatMapper } from './components/SeatMapper';
+import { MapPin, Users, CheckSquare, LogOut, Loader2, Plus, Sparkles } from 'lucide-react';
 import './App.css';
 
 function App() {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const [activeSession, setActiveSession] = useState<any>(null);
+  const [allSessions, setAllSessions] = useState<any[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -24,12 +27,30 @@ function App() {
       setSession(session);
     });
 
-    return () => subscription.unsubscribe();
+    // Fetch all sessions for building the Map
+    fetchGlobalSessions();
+
+    const globalSubscription = supabase
+      .channel('global:sessions')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions' }, () => {
+        fetchGlobalSessions();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+      supabase.removeChannel(globalSubscription);
+    };
   }, []);
+
+  const fetchGlobalSessions = async () => {
+    const { data } = await supabase.from('sessions').select('subject, coordinates');
+    if (data) setAllSessions(data);
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    setSelectedSessionId(null);
+    setActiveSession(null);
   };
 
   if (loading) {
@@ -85,27 +106,35 @@ function App() {
       </header>
 
       <main className="max-w-6xl mx-auto grid gap-8 md:grid-cols-12">
-        <div className="md:col-span-8 flex flex-col gap-8">
-          <section className="bg-neutral-800/30 backdrop-blur-sm p-8 rounded-3xl border border-neutral-700/50 min-h-[400px]">
-            <SessionFeed />
+        <div className="md:col-span-12 flex flex-col gap-8">
+          {/* Welcome Banner */}
+          <section className="bg-gradient-to-r from-blue-600/20 to-emerald-500/10 border border-blue-500/20 p-8 rounded-3xl flex justify-between items-center gap-8 relative overflow-hidden">
+             <div className="relative z-10">
+               <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                 <Sparkles className="w-6 h-6 text-yellow-400" />
+                 Productivity is peaking today.
+                </h2>
+               <p className="text-neutral-400 max-w-md">There are currently {allSessions.length} active study sessions across the MIT-WPU Library floor.</p>
+             </div>
+             <Sparkles className="absolute -right-8 -top-8 w-64 h-64 text-blue-500/10 rotate-12" />
           </section>
         </div>
 
-        <div className="md:col-span-4 flex flex-col gap-6">
-          <section className="bg-gradient-to-br from-neutral-800 to-neutral-900 p-6 rounded-3xl border border-neutral-700 shadow-xl group cursor-pointer hover:border-blue-500/50 transition-all">
-            <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <MapPin className="w-6 h-6 text-blue-400" />
-            </div>
-            <h2 className="text-xl font-bold mb-2">Live Mapper</h2>
-            <p className="text-neutral-400 text-sm leading-relaxed">Visualize all study groups on campus floor plans in real-time.</p>
+        <div className="md:col-span-7 flex flex-col gap-8">
+          <section className="bg-neutral-800/30 backdrop-blur-sm p-8 rounded-3xl border border-neutral-700/50 min-h-[400px]">
+            <SessionFeed onSelectSession={(s) => setActiveSession(s)} />
           </section>
+        </div>
 
-          <section className="bg-gradient-to-br from-neutral-800 to-neutral-900 p-6 rounded-3xl border border-neutral-700 shadow-xl group cursor-pointer hover:border-purple-500/50 transition-all">
-            <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <CheckSquare className="w-6 h-6 text-purple-400" />
+        <div className="md:col-span-5 flex flex-col gap-8">
+          <section className="bg-neutral-800/30 backdrop-blur-sm p-6 rounded-3xl border border-neutral-700/50 overflow-hidden">
+            <h3 className="text-sm font-black text-neutral-500 uppercase tracking-widest mb-4">Real-time Campus Map</h3>
+            <div className="scale-75 origin-top">
+              <SeatMapper 
+                readonly 
+                pins={allSessions.map(s => ({ ...s.coordinates, label: s.subject }))} 
+              />
             </div>
-            <h2 className="text-xl font-bold mb-2">Collaboration</h2>
-            <p className="text-neutral-400 text-sm leading-relaxed">Join a session to access the shared workspace and resources.</p>
           </section>
         </div>
       </main>
@@ -114,6 +143,13 @@ function App() {
         <CreateSessionModal 
           userId={session.user.id} 
           onClose={() => setIsModalOpen(false)} 
+        />
+      )}
+
+      {activeSession && (
+        <LiveWorkspace 
+          session={activeSession} 
+          onClose={() => setActiveSession(null)} 
         />
       )}
 
