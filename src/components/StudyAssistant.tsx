@@ -107,37 +107,37 @@ Instructions:
   };
 
   return (
-    <div className="flex flex-col h-full bg-neutral-800/30 backdrop-blur-sm border border-neutral-700/50 rounded-3xl overflow-hidden relative">
-      <div className="p-4 border-b border-neutral-700/50 flex items-center gap-3 bg-neutral-800/80">
-        <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl">
+    <div className="flex flex-col h-full overflow-hidden relative">
+      <div className="p-6 border-b border-white/60 flex items-center gap-4 bg-white/40 backdrop-blur-md">
+        <div className="p-3 bg-gradient-to-br from-primary to-secondary rounded-2xl shadow-lg shadow-primary/20">
           <Bot className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h3 className="font-bold text-sm text-white flex items-center gap-1">
-            Study Guide AI <Sparkles className="w-3 h-3 text-yellow-400" />
+          <h3 className="font-black text-sm text-on-surface flex items-center gap-2 headline-font uppercase tracking-tight">
+            Study Guide AI <Sparkles className="w-3 h-3 text-amber-500" />
           </h3>
-          <p className="text-[10px] text-neutral-400 uppercase tracking-widest">Powered by Groq</p>
+          <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-[0.2em] opacity-60">Adaptive Campus Assistant</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] max-h-[400px]">
+      <div className="flex-1 overflow-y-auto p-6 space-y-5 min-h-[300px] max-h-[450px]">
         <AnimatePresence>
           {messages.map((msg, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
             >
               <div 
-                className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
+                className={`max-w-[90%] p-4 rounded-[1.5rem] text-sm leading-relaxed shadow-sm ${
                   msg.role === 'user' 
-                    ? 'bg-blue-600 text-white rounded-tr-sm' 
-                    : 'bg-neutral-700/50 text-neutral-200 border border-neutral-600/50 rounded-tl-sm'
+                    ? 'bg-primary text-white rounded-tr-none shadow-md' 
+                    : 'bg-white/60 text-on-surface border border-white/80 rounded-tl-none font-medium'
                 }`}
               >
                 {msg.role === 'assistant' ? (
-                  <div className="prose prose-invert prose-sm">
+                  <div className="prose prose-sm prose-slate">
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                 ) : (
@@ -150,29 +150,29 @@ Instructions:
         
         {loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start">
-            <div className="bg-neutral-700/50 p-3 rounded-2xl rounded-tl-sm border border-neutral-600/50 flex items-center gap-2">
-              <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
-              <span className="text-xs text-neutral-400">Scanning campus...</span>
+            <div className="bg-white/60 p-4 rounded-[1.5rem] rounded-tl-none border border-white/80 flex items-center gap-3">
+              <Loader2 className="w-4 h-4 text-primary animate-spin" />
+              <span className="text-xs font-bold text-on-surface-variant opacity-60 uppercase tracking-widest">Scanning campus...</span>
             </div>
           </motion.div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 bg-neutral-800/80 border-t border-neutral-700/50">
+      <div className="p-5 bg-white/40 backdrop-blur-md border-t border-white/60">
         <form onSubmit={handleSend} className="relative">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={loading}
-            placeholder="e.g., Take me to the engineering physics guys."
-            className="w-full bg-neutral-900 border border-neutral-700 rounded-xl py-3 pl-4 pr-12 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all placeholder:text-neutral-500 disabled:opacity-50"
+            placeholder="Ask where to study..."
+            className="w-full bg-white/60 border border-white/80 rounded-2xl py-4 pl-5 pr-14 text-sm font-medium text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-outline-variant disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-all disabled:opacity-50 disabled:bg-neutral-700"
+            className="absolute right-2 top-2 bottom-2 aspect-square bg-primary hover:bg-primary/90 text-white rounded-xl flex items-center justify-center transition-all shadow-lg shadow-primary/20 disabled:opacity-50 active:scale-95"
           >
             <Send className="w-4 h-4" />
           </button>

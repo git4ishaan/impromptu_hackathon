@@ -377,34 +377,41 @@ Rules:
   // ---------------- GATEKEEPER VIEW ----------------
   if (isLockedOut) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8">
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-neutral-900 border border-neutral-700 rounded-3xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl">
-          <div className="w-16 h-16 bg-neutral-800 rounded-2xl mx-auto flex items-center justify-center">
-            <Shield className="w-8 h-8 text-indigo-400" />
+      <div className="flex-1 flex items-center justify-center p-8 relative">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          className="glass-card p-10 max-w-md w-full text-center space-y-8 rounded-[2rem] relative z-10 shadow-2xl shadow-primary/10"
+        >
+          <div className="w-20 h-20 bg-primary/10 rounded-3xl mx-auto flex items-center justify-center border border-primary/20">
+            <Shield className="w-10 h-10 text-primary" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">{session.subject}</h2>
-            <p className="text-neutral-400 mt-2">This is a private study session.</p>
+            <h2 className="text-3xl font-black headline-font text-on-surface leading-tight">{session.subject}</h2>
+            <p className="text-on-surface-variant mt-3 font-medium opacity-80">This is a private study session.</p>
           </div>
           
           {memberStatus === 'none' && (
-            <button onClick={handleRequestJoin} className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl transition-all">
+            <button 
+              onClick={handleRequestJoin} 
+              className="w-full py-4 tonal-gradient-btn font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all headline-font"
+            >
               Request to Join
             </button>
           )}
           {memberStatus === 'pending' && (
-            <div className="p-4 bg-neutral-800 rounded-xl border border-neutral-700 flex items-center justify-center gap-3">
-              <Loader2 className="w-5 h-5 text-indigo-400 animate-spin" />
-              <p className="font-bold text-neutral-300">Waiting for Host Approval...</p>
+            <div className="p-5 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 flex items-center justify-center gap-3">
+              <Loader2 className="w-5 h-5 text-primary animate-spin" />
+              <p className="font-bold text-primary headline-font">Waiting for Host Approval...</p>
             </div>
           )}
           {memberStatus === 'kicked' && (
-            <div className="p-4 bg-red-500/10 rounded-xl border border-red-500/20 text-red-400 font-bold">
+            <div className="p-5 bg-red-500/10 rounded-2xl border border-red-500/20 text-red-600 font-bold headline-font">
               You cannot join this session right now.
             </div>
           )}
 
-          <button onClick={onClose} className="text-sm text-neutral-500 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest opacity-60">
             Back to Dashboard
           </button>
         </motion.div>
@@ -414,23 +421,25 @@ Rules:
 
   // ---------------- MAIN WORKSPACE VIEW ----------------
   return (
-    <div className="flex-1 flex flex-col">
-      <div className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className={`p-3 rounded-2xl ${session.is_private ? 'bg-indigo-500/10' : 'bg-emerald-500/10'}`}>
-              {session.is_private ? <Shield className="w-6 h-6 text-indigo-400" /> : <CheckCircle2 className="w-6 h-6 text-emerald-400" />}
+    <div className="flex-1 flex flex-col relative z-10 pb-20">
+      {/* Top Header Card */}
+      <div className="px-6 pt-6">
+        <div className="glass-card rounded-[2rem] px-8 py-5 flex items-center justify-between shadow-xl shadow-primary/5">
+          <div className="flex items-center gap-5">
+            <div className={`p-4 rounded-3xl ${session.is_private ? 'bg-indigo-500/10 text-indigo-500 border border-indigo-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'}`}>
+              {session.is_private ? <Shield className="w-7 h-7" /> : <CheckCircle2 className="w-7 h-7" />}
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-3xl font-black headline-font text-on-surface flex items-center gap-3 leading-tight">
                 {session.subject}
-                {session.is_private && <span className="text-[10px] px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full border border-indigo-500/30 uppercase tracking-widest font-black">Private</span>}
+                {session.is_private && <span className="text-[10px] px-2.5 py-1 bg-indigo-500/10 text-indigo-500 rounded-full border border-indigo-500/20 uppercase tracking-[0.2em] font-black">Private</span>}
               </h2>
-              <p className="text-sm text-neutral-400 flex items-center gap-1">
-                <MapPin className="w-3 h-3" /> {session.location_name}
+              <p className="text-sm font-bold text-on-surface-variant opacity-60 flex items-center gap-1.5 mt-1 headline-font">
+                <MapPin className="w-3.5 h-3.5" /> 
+                <span className="uppercase tracking-widest">{session.location_name}</span>
                 {session.duration_minutes && (
                   <>
-                    <span className="text-neutral-600 px-2">•</span>
+                    <span className="opacity-30 inline-block w-1 h-1 rounded-full bg-on-surface mx-1"></span>
                     <span className="flex items-center gap-1">⏱️ {session.duration_minutes} min limit</span>
                   </>
                 )}
@@ -440,7 +449,7 @@ Rules:
           {isHost && (
             <button 
               onClick={handleEndSession}
-              className="flex items-center gap-2 px-4 py-2.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 rounded-xl text-sm font-bold transition-all active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white border border-red-500/20 rounded-2xl text-sm font-black transition-all active:scale-95 headline-font uppercase tracking-widest"
             >
               <Power className="w-4 h-4" />
               End Session
@@ -476,36 +485,40 @@ Rules:
 
       <main className="flex-1 overflow-y-auto p-6 max-w-6xl mx-auto w-full grid gap-8 md:grid-cols-12">
         {/* LEFT COLUMN: Tasks */}
-        <div className="md:col-span-5 space-y-6">
-          <div className="bg-neutral-800/50 border border-neutral-700 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-               Shared Task List
-               <span className="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 uppercase tracking-widest font-black">Syncing</span>
-            </h3>
+        <div className="md:col-span-5 space-y-8">
+          <div className="glass-card rounded-[2.5rem] p-8 shadow-2xl shadow-primary/5">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <h3 className="text-xl font-black headline-font text-on-surface uppercase tracking-tight">
+                   Shared Tasks
+                </h3>
+                <span className="px-2.5 py-1 bg-primary/10 text-primary font-black text-[10px] rounded-lg tracking-[0.2em] border border-primary/20">LIVE</span>
+              </div>
+            </div>
 
-            <form onSubmit={addTask} className="mb-6 relative">
+            <form onSubmit={addTask} className="mb-10 relative">
               <input 
                 type="text"
-                placeholder="Add a task..."
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-2xl py-3.5 pl-5 pr-14 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all placeholder:text-neutral-600 shadow-inner"
+                placeholder="Add a study task..."
+                className="w-full bg-white/40 border border-white/80 rounded-2xl py-5 px-6 pr-16 text-on-surface text-sm font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-outline-variant shadow-sm"
                 value={newTaskContent}
                 onChange={(e) => setNewTaskContent(e.target.value)}
               />
               <button 
                 type="submit"
-                className="absolute right-2 top-2 bottom-2 aspect-square bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl flex items-center justify-center transition-all shadow-lg shadow-emerald-500/20 active:scale-90"
+                className="absolute right-2 top-2 bottom-2 aspect-square bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl flex items-center justify-center transition-all shadow-xl shadow-emerald-500/30 active:scale-90"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-6 h-6" />
               </button>
             </form>
 
-            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
               {loading ? (
-                <div className="flex justify-center p-8">
-                  <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
+                <div className="flex justify-center p-12">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
                 </div>
               ) : tasks.length === 0 ? (
-                <p className="text-center text-neutral-500 py-8 text-sm italic">No tasks created yet.</p>
+                <p className="text-center text-on-surface-variant py-12 text-sm font-medium italic opacity-60">No goals set for this session yet.</p>
               ) : (
                 tasks.map((task) => (
                   <motion.div 
@@ -513,14 +526,20 @@ Rules:
                     key={task.id}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="flex items-center justify-between p-3 bg-neutral-900/50 border border-neutral-700/50 rounded-xl hover:border-emerald-500/30 transition-all group"
+                    className="flex items-center justify-between p-4 bg-white/40 border border-white/60 rounded-2xl hover:border-primary/30 transition-all group shadow-sm"
                   >
-                    <div className="flex items-center gap-3 cursor-pointer flex-1" onClick={() => toggleTask(task)}>
-                      {task.is_completed ? <CheckCircle2 className="w-4 h-4 text-emerald-500 fill-emerald-500/10" /> : <Circle className="w-4 h-4 text-neutral-600 group-hover:text-emerald-500 transition-colors" />}
-                      <span className={`text-sm transition-all ${task.is_completed ? 'text-neutral-500 line-through' : 'text-neutral-200'}`}>{task.task_content}</span>
+                    <div className="flex items-center gap-4 cursor-pointer flex-1" onClick={() => toggleTask(task)}>
+                      <div className={`w-6 h-6 flex items-center justify-center rounded-lg border-2 transition-all ${
+                        task.is_completed 
+                          ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600' 
+                          : 'border-outline-variant group-hover:border-primary'
+                      }`}>
+                        {task.is_completed && <CheckCircle2 className="w-4 h-4" />}
+                      </div>
+                      <span className={`text-sm font-bold headline-font transition-all ${task.is_completed ? 'text-on-surface-variant line-through opacity-50' : 'text-on-surface'}`}>{task.task_content}</span>
                     </div>
-                    <button onClick={() => deleteTask(task.id)} className="p-1.5 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-neutral-600 hover:text-red-400 rounded-lg transition-all">
-                      <Trash2 className="w-3.5 h-3.5" />
+                    <button onClick={() => deleteTask(task.id)} className="p-2 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-red-400 rounded-xl transition-all">
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </motion.div>
                 ))
@@ -531,37 +550,37 @@ Rules:
 
         {/* CENTER COLUMN: AI Tutor Chat */}
         <div className="md:col-span-4">
-          <div className="bg-neutral-800/50 border border-neutral-700 rounded-3xl shadow-xl flex flex-col h-[600px] overflow-hidden">
-            <div className="p-4 border-b border-neutral-700/50 flex items-center gap-3 bg-neutral-800/80">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
+          <div className="glass-card rounded-[2.5rem] shadow-2xl shadow-primary/5 flex flex-col h-[650px] overflow-hidden">
+            <div className="p-6 border-b border-white/60 flex items-center gap-4 bg-white/40 backdrop-blur-md">
+              <div className="p-3 bg-gradient-to-br from-primary to-secondary rounded-2xl shadow-lg shadow-primary/20">
                 <Bot className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-sm text-white flex items-center gap-1">
-                  {session.subject} Tutor <Sparkles className="w-3 h-3 text-yellow-400" />
+                <h3 className="font-black text-sm text-on-surface flex items-center gap-2 headline-font uppercase tracking-tight">
+                  AI Tutor <Sparkles className="w-3 h-3 text-amber-500" />
                 </h3>
-                <p className="text-[10px] text-neutral-400 uppercase tracking-widest">AI Study Helper</p>
+                <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-[0.2em] opacity-60">Personal Study Helper</p>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 overflow-y-auto p-6 space-y-5">
               <AnimatePresence>
                 {chatMessages.map((msg, idx) => (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
                     className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
                   >
                     <div 
-                      className={`max-w-[90%] p-3 rounded-2xl text-sm leading-relaxed ${
+                      className={`max-w-[90%] p-4 rounded-[1.5rem] text-sm leading-relaxed shadow-sm ${
                         msg.role === 'user' 
-                          ? 'bg-purple-600 text-white rounded-tr-sm' 
-                          : 'bg-neutral-700/50 text-neutral-200 border border-neutral-600/50 rounded-tl-sm'
+                          ? 'bg-primary text-white rounded-tr-none' 
+                          : 'bg-white/60 text-on-surface border border-white/80 rounded-tl-none font-medium'
                       }`}
                     >
                       {msg.role === 'assistant' ? (
-                        <div className="prose prose-invert prose-sm">
+                        <div className="prose prose-sm prose-slate">
                           <ReactMarkdown>{msg.content}</ReactMarkdown>
                         </div>
                       ) : (
@@ -574,41 +593,41 @@ Rules:
               
               {chatLoading && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start">
-                  <div className="bg-neutral-700/50 p-3 rounded-2xl rounded-tl-sm border border-neutral-600/50 flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
-                    <span className="text-xs text-neutral-400">Thinking...</span>
+                  <div className="bg-white/60 p-4 rounded-[1.5rem] rounded-tl-none border border-white/80 flex items-center gap-3">
+                    <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                    <span className="text-xs font-bold text-on-surface-variant opacity-60 uppercase tracking-widest">Thinking...</span>
                   </div>
                 </motion.div>
               )}
               <div ref={chatEndRef} />
             </div>
 
-            <div className="p-3 bg-neutral-800/80 border-t border-neutral-700/50">
+            <div className="p-5 bg-white/40 backdrop-blur-md border-t border-white/60">
               <form onSubmit={handleChatSend} className="relative">
                 <input
                   type="text"
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   disabled={chatLoading}
-                  placeholder="Ask about the subject..."
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-xl py-3 pl-4 pr-12 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all placeholder:text-neutral-500 disabled:opacity-50"
+                  placeholder="Ask a question..."
+                  className="w-full bg-white/60 border border-white/80 rounded-2xl py-4 pl-5 pr-14 text-sm font-medium text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-outline-variant disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={!chatInput.trim() || chatLoading}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-all disabled:opacity-50 disabled:bg-neutral-700"
+                  className="absolute right-2 top-2 bottom-2 aspect-square bg-primary hover:bg-primary/90 text-white rounded-xl flex items-center justify-center transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:bg-surface-variant active:scale-90"
                 >
                   <Send className="w-4 h-4" />
                 </button>
               </form>
-              <div className="flex gap-2 mt-2">
-                <button onClick={() => { setChatInput('Generate sample exam questions'); }} className="text-[10px] px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-300 rounded-lg transition-colors">
+              <div className="flex gap-2 mt-3 overflow-x-auto pb-1 no-scrollbar">
+                <button onClick={() => { setChatInput('Generate sample exam questions'); }} className="whitespace-nowrap text-[10px] px-3 py-1.5 bg-white/60 border border-white/80 hover:bg-white text-on-surface-variant font-bold rounded-full transition-all uppercase tracking-widest">
                   📝 Exam Qs
                 </button>
-                <button onClick={() => { setChatInput('Create a study roadmap from my tasks'); }} className="text-[10px] px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-300 rounded-lg transition-colors">
+                <button onClick={() => { setChatInput('Create a study roadmap from my tasks'); }} className="whitespace-nowrap text-[10px] px-3 py-1.5 bg-white/60 border border-white/80 hover:bg-white text-on-surface-variant font-bold rounded-full transition-all uppercase tracking-widest">
                   🗺️ Roadmap
                 </button>
-                <button onClick={() => { setChatInput('Explain the key concepts'); }} className="text-[10px] px-2 py-1 bg-neutral-700 hover:bg-neutral-600 text-neutral-300 rounded-lg transition-colors">
+                <button onClick={() => { setChatInput('Explain the key concepts'); }} className="whitespace-nowrap text-[10px] px-3 py-1.5 bg-white/60 border border-white/80 hover:bg-white text-on-surface-variant font-bold rounded-full transition-all uppercase tracking-widest">
                   💡 Explain
                 </button>
               </div>
@@ -617,39 +636,45 @@ Rules:
         </div>
 
         {/* RIGHT COLUMN: Sidebar Widgets */}
-        <div className="md:col-span-3 space-y-6">
+        <div className="md:col-span-3 space-y-8">
           {/* Location & Map Widget */}
-          <div className="bg-neutral-800/50 border border-neutral-700 rounded-3xl p-6 shadow-xl overflow-hidden">
-            <h3 className="text-sm font-bold text-neutral-400 mb-4 uppercase tracking-widest flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-blue-400" /> Location & Map
+          <div className="glass-card rounded-[2.5rem] p-6 shadow-2xl shadow-primary/5 overflow-hidden">
+            <h3 className="text-xs font-black text-on-surface-variant mb-6 uppercase tracking-[0.2em] flex items-center gap-3 opacity-60 headline-font">
+              <MapPin className="w-4 h-4 text-primary" /> Location
             </h3>
             
             <div className="space-y-4">
-              <div className="flex items-start gap-3 p-3 bg-neutral-900/50 rounded-xl border border-neutral-800">
-                <Library className="w-5 h-5 text-emerald-400 mt-0.5" />
+              <div className="flex items-start gap-4 p-4 bg-white/40 rounded-2xl border border-white/80 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Library className="w-5 h-5" />
+                </div>
                 <div>
-                  <p className="text-xs font-black text-white uppercase tracking-wider">MIT-WPU Central Library</p>
-                  <p className="text-[11px] text-neutral-400 mt-0.5">{session.location_name}</p>
+                  <p className="text-sm font-black text-on-surface headline-font">MIT-WPU Central Library</p>
+                  <p className="text-[11px] font-bold text-on-surface-variant mt-1 opacity-60 uppercase tracking-widest leading-relaxed">
+                    {session.location_name}
+                  </p>
                 </div>
               </div>
 
               <div 
-                className="rounded-2xl border border-neutral-700 overflow-hidden relative group cursor-pointer hover:border-blue-500/50 transition-all"
+                className="rounded-2xl border border-white/80 overflow-hidden relative group cursor-pointer hover:border-primary/50 transition-all shadow-sm"
                 onClick={() => setShowMapModal(true)}
               >
-                <div className="scale-[0.6] origin-top-left -mb-[40%]">
+                <div className="scale-[0.55] origin-top-left -mb-[45%]">
                   <SeatMapper 
                     readonly 
                     pins={session.coordinates ? [{ ...session.coordinates, label: 'YOU ARE HERE' }] : []}
                   />
                 </div>
                 {!session.coordinates && (
-                  <div className="absolute inset-0 bg-neutral-900/80 backdrop-blur-sm flex items-center justify-center p-4 text-center">
-                    <p className="text-xs text-neutral-500 italic">No map location Pinned.</p>
+                  <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center p-4 text-center">
+                    <p className="text-xs font-bold text-on-surface-variant italic opacity-60">No map location pinned.</p>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-neutral-900/0 group-hover:bg-neutral-900/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <span className="text-xs font-bold text-white bg-blue-600 px-3 py-1.5 rounded-full shadow-lg"> Click to expand</span>
+                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <span className="text-[10px] font-black text-white bg-primary px-4 py-2 rounded-full shadow-xl uppercase tracking-widest"> 
+                    Expand Map
+                  </span>
                 </div>
               </div>
             </div>
@@ -662,34 +687,37 @@ Rules:
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-neutral-950/90 backdrop-blur-xl flex items-center justify-center p-8"
+                className="fixed inset-0 z-[100] bg-on-surface/20 backdrop-blur-xl flex items-center justify-center p-8"
                 onClick={() => setShowMapModal(false)}
               >
                 <motion.div
-                  initial={{ scale: 0.7, opacity: 0 }}
+                  initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.7, opacity: 0 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                  className="bg-neutral-900 border border-neutral-700 rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden"
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  className="glass-card rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(74,64,224,0.3)] max-w-4xl w-full overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="p-5 border-b border-neutral-800 flex items-center justify-between bg-neutral-800/50">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-blue-400" />
+                  <div className="p-8 border-b border-white/60 flex items-center justify-between bg-white/40">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+                        <MapPin className="w-6 h-6" />
+                      </div>
                       <div>
-                        <h3 className="font-bold text-white">Session Location</h3>
-                        <p className="text-xs text-neutral-400">{session.location_name} — MIT-WPU Central Library</p>
+                        <h3 className="text-xl font-black text-on-surface headline-font">Campus Floor Plan</h3>
+                        <p className="text-sm font-bold text-on-surface-variant opacity-60 uppercase tracking-widest">{session.location_name}</p>
                       </div>
                     </div>
-                    <button onClick={() => setShowMapModal(false)} className="p-2 hover:bg-neutral-700 rounded-xl transition-colors text-neutral-400 hover:text-white">
-                      <X className="w-5 h-5" />
+                    <button onClick={() => setShowMapModal(false)} className="w-12 h-12 flex items-center justify-center bg-white/60 hover:bg-white text-on-surface-variant hover:text-red-500 rounded-2xl transition-all active:scale-90">
+                      <X className="w-6 h-6" />
                     </button>
                   </div>
-                  <div className="p-6">
-                    <SeatMapper 
-                      readonly 
-                      pins={session.coordinates ? [{ ...session.coordinates, label: session.subject + ' — YOU ARE HERE' }] : []}
-                    />
+                  <div className="p-10 flex justify-center bg-white/20">
+                    <div className="p-1 bg-white ring-1 ring-white/20 rounded-3xl shadow-inner">
+                      <SeatMapper 
+                        readonly 
+                        pins={session.coordinates ? [{ ...session.coordinates, label: session.subject + ' — YOU ARE HERE' }] : []}
+                      />
+                    </div>
                   </div>
                 </motion.div>
               </motion.div>
@@ -698,30 +726,32 @@ Rules:
 
           {/* Host Moderation Panel */}
           {isHost && (
-            <div className="bg-indigo-900/20 border border-indigo-500/30 rounded-3xl p-6 shadow-xl">
-               <h3 className="text-sm font-bold text-indigo-400 mb-4 uppercase tracking-widest flex items-center gap-2">
-                 <Shield className="w-4 h-4" /> Host Controls
+            <div className="glass-card rounded-[2.5rem] p-8 shadow-2xl shadow-primary/5">
+               <h3 className="text-xs font-black text-primary mb-6 uppercase tracking-[0.2em] flex items-center gap-3 headline-font">
+                 <Shield className="w-4 h-4" /> Management
                </h3>
                
-               <div className="space-y-4">
+               <div className="space-y-6">
                  {members.filter(m => m.status === 'pending').length > 0 && (
-                   <div className="space-y-2">
-                     <p className="text-xs text-neutral-400 uppercase font-bold">Pending Requests</p>
+                   <div className="space-y-3">
+                     <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] opacity-60">Pending Requests</p>
                      {members.filter(m => m.status === 'pending').map(m => (
-                       <div key={m.id} className="flex items-center justify-between p-3 bg-neutral-900/50 rounded-xl border border-neutral-800">
-                         <span className="text-sm font-medium">{m.profiles?.full_name || 'Anonymous'}</span>
+                       <div key={m.id} className="flex items-center justify-between p-4 bg-white/40 rounded-2xl border border-white/80 shadow-sm">
+                         <span className="text-sm font-bold headline-font">{m.profiles?.full_name || 'Anonymous'}</span>
                          <div className="flex gap-2">
                            <button 
                              onClick={() => updateMemberStatus(m.id, 'approved')} 
-                             className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition-all active:scale-95"
+                             className="p-2 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl transition-all active:scale-90 shadow-lg shadow-emerald-500/20"
+                             title="Approve"
                            >
-                             ✓ Accept
+                             <UserCheck className="w-4 h-4" />
                            </button>
                            <button 
                              onClick={() => deleteMember(m.id)} 
-                             className="px-3 py-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white text-xs font-bold rounded-lg transition-all active:scale-95"
+                             className="p-2 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white rounded-xl transition-all active:scale-90"
+                             title="Decline"
                            >
-                             ✕
+                             <X className="w-4 h-4" />
                            </button>
                          </div>
                        </div>
@@ -729,55 +759,61 @@ Rules:
                    </div>
                  )}
 
-                 <div className="space-y-2">
-                   <p className="text-xs text-neutral-400 uppercase font-bold">Approved</p>
+                 <div className="space-y-3">
+                   <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] opacity-60">Active Members</p>
                    {members.filter(m => m.status === 'approved').map(m => (
-                     <div key={m.id} className="flex items-center justify-between p-2 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                       <span className="text-sm text-neutral-300">{m.profiles?.full_name || 'Anonymous'}</span>
-                       <button onClick={() => updateMemberStatus(m.id, 'kicked')} className="p-1.5 hover:bg-red-500/20 text-neutral-500 hover:text-red-400 rounded transition-all" title="Kick user">
+                     <div key={m.id} className="flex items-center justify-between p-3 bg-white/40 rounded-2xl border border-white/60">
+                       <span className="text-sm font-bold text-on-surface-variant headline-font">{m.profiles?.full_name || 'Anonymous'}</span>
+                       <button onClick={() => updateMemberStatus(m.id, 'kicked')} className="p-2 bg-red-500/10 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition-all" title="Kick user">
                          <UserMinus className="w-4 h-4" />
                        </button>
                      </div>
                    ))}
-                   {members.filter(m => m.status === 'approved').length === 0 && <p className="text-xs text-neutral-500 italic">No members yet.</p>}
+                   {members.filter(m => m.status === 'approved').length === 0 && <p className="text-xs font-bold text-on-surface-variant italic opacity-40">No members yet.</p>}
                  </div>
                </div>
             </div>
           )}
 
           {/* People in Session Widget */}
-          <div className="bg-neutral-800/50 border border-neutral-700 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-sm font-bold text-neutral-400 mb-4 uppercase tracking-widest flex items-center gap-2">
-              <Users className="w-4 h-4 text-emerald-400" /> People
+          <div className="glass-card rounded-[2.5rem] p-8 shadow-2xl shadow-primary/5">
+            <h3 className="text-xs font-black text-on-surface-variant mb-6 uppercase tracking-[0.2em] flex items-center gap-3 opacity-60 headline-font">
+              <Users className="w-4 h-4 text-emerald-500" /> Students
             </h3>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3 p-2 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-[10px] font-black text-white">H</div>
-                <span className="text-sm text-white font-medium">{session.profiles?.full_name || 'Host'}</span>
-                <span className="ml-auto text-[9px] px-1.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 uppercase font-black">Host</span>
+            <div className="space-y-3">
+              <div className="flex items-center gap-4 p-3 bg-white/40 rounded-2xl border border-white/80 shadow-sm relative overflow-hidden group">
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-container rounded-full flex items-center justify-center text-xs font-black text-white shadow-lg relative z-10">
+                  {session.profiles?.full_name?.[0]?.toUpperCase() || 'H'}
+                </div>
+                <div className="relative z-10">
+                  <span className="text-sm font-black text-on-surface headline-font block">{session.profiles?.full_name || 'Host'}</span>
+                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Session Host</span>
+                </div>
               </div>
               {members.filter(m => m.status === 'approved').map(m => (
-                <div key={m.id} className="flex items-center gap-3 p-2 bg-neutral-900/50 rounded-lg border border-neutral-800">
-                  <div className="w-7 h-7 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-[10px] font-black text-white">
+                <div key={m.id} className="flex items-center gap-4 p-3 bg-white/40 rounded-2xl border border-white/60 shadow-sm">
+                  <div className="w-10 h-10 bg-gradient-to-br from-secondary to-secondary-container rounded-full flex items-center justify-center text-xs font-black text-white shadow-lg">
                     {(m.profiles?.full_name || 'A')[0].toUpperCase()}
                   </div>
-                  <span className="text-sm text-neutral-300">{m.profiles?.full_name || 'Anonymous'}</span>
+                  <span className="text-sm font-bold text-on-surface-variant headline-font">{m.profiles?.full_name || 'Anonymous'}</span>
+                  <div className="ml-auto flex gap-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                  </div>
                 </div>
               ))}
               {members.filter(m => m.status === 'approved').length === 0 && (
-                <p className="text-xs text-neutral-500 italic">Just the host so far.</p>
+                <p className="text-xs font-bold text-on-surface-variant italic opacity-40 text-center py-2">Working alone...</p>
               )}
             </div>
           </div>
 
-
           {/* Shared Resource Stash */}
-          <div className="bg-neutral-800/50 border border-neutral-700 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-sm font-bold text-neutral-400 mb-4 uppercase tracking-widest flex items-center gap-2">
-              <FileText className="w-4 h-4 text-amber-400" /> Resource Stash
+          <div className="glass-card rounded-[2.5rem] p-8 shadow-2xl shadow-primary/5">
+            <h3 className="text-xs font-black text-amber-600 mb-6 uppercase tracking-[0.2em] flex items-center gap-3 headline-font">
+              <FileText className="w-4 h-4" /> Resources
             </h3>
-            <p className="text-[10px] text-neutral-500 mb-3">Upload textbooks & notes. Text files are auto-scanned by the AI tutor.</p>
-
+            
             <input
               ref={fileInputRef}
               type="file"
@@ -788,33 +824,33 @@ Rules:
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-neutral-900 hover:bg-neutral-700 border border-dashed border-neutral-600 hover:border-amber-500/50 rounded-xl text-sm text-neutral-400 hover:text-amber-400 transition-all mb-4 disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 py-4 bg-white/40 hover:bg-white/80 border-2 border-dashed border-amber-500/30 hover:border-amber-500/60 rounded-2xl text-sm font-black text-amber-700 transition-all mb-6 disabled:opacity-50 active:scale-95 headline-font uppercase tracking-widest"
             >
-              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-              {uploading ? 'Uploading...' : 'Upload File'}
+              {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
+              {uploading ? 'Scanning...' : 'Upload Notes'}
             </button>
 
-            <div className="space-y-2 max-h-40 overflow-y-auto">
+            <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
               {sharedFiles.length === 0 ? (
-                <p className="text-xs text-neutral-500 italic text-center py-2">No files shared yet.</p>
+                <p className="text-xs font-bold text-on-surface-variant italic text-center py-4 opacity-40">No shared resources yet.</p>
               ) : (
                 sharedFiles.map((f, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-2.5 bg-neutral-900/50 rounded-xl border border-neutral-800 group hover:border-amber-500/30 transition-all">
-                    <div className={`p-1.5 rounded-lg ${f.textContent ? 'bg-amber-500/10' : 'bg-neutral-700'}`}>
-                      {f.textContent ? <FileText className="w-3.5 h-3.5 text-amber-400" /> : <FileIcon className="w-3.5 h-3.5 text-neutral-400" />}
+                  <div key={idx} className="flex items-center gap-4 p-4 bg-white/40 rounded-2xl border border-white/80 group hover:border-amber-500/30 transition-all shadow-sm">
+                    <div className={`p-2.5 rounded-xl ${f.textContent ? 'bg-amber-500/10 text-amber-600' : 'bg-surface-variant/20 text-on-surface-variant'}`}>
+                      {f.textContent ? <FileText className="w-5 h-5" /> : <FileIcon className="w-5 h-5" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-neutral-200 truncate">{f.name}</p>
-                      <p className="text-[10px] text-neutral-500">
+                      <p className="text-xs font-black text-on-surface truncate headline-font">{f.name}</p>
+                      <p className="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase tracking-widest mt-1">
                         {(f.size / 1024).toFixed(1)} KB
-                        {f.textContent && <span className="text-amber-400 ml-1">• AI-scanned</span>}
+                        {f.textContent && <span className="text-amber-600 ml-2">• AI Scanned</span>}
                       </p>
                     </div>
                     <button
                       onClick={() => setSharedFiles(prev => prev.filter((_, i) => i !== idx))}
-                      className="p-1 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-neutral-600 hover:text-red-400 rounded transition-all"
+                      className="p-2 opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-red-500 rounded-xl transition-all"
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ))
@@ -823,6 +859,19 @@ Rules:
           </div>
         </div>
       </main>
+
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6 z-[70] flex gap-4">
+        <button className="flex-1 tonal-gradient-btn py-5 rounded-[2rem] font-black headline-font shadow-2xl shadow-primary/30 active:scale-95 transition-all flex items-center justify-center gap-3 uppercase tracking-[0.2em] group">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          Join Group Voice
+        </button>
+        <button className="w-20 h-20 bg-white/80 backdrop-blur-xl rounded-[2rem] flex items-center justify-center shadow-2xl active:scale-95 transition-all border border-white/60 text-primary">
+          <LinkIcon className="w-6 h-6" />
+        </button>
+      </div>
 
       <footer className="p-4 border-t border-neutral-800 text-center text-[10px] text-neutral-600 uppercase tracking-widest bg-neutral-900/80 backdrop-blur-md flex items-center justify-center gap-2">
         <Users className="w-3 h-3" /> Synced securely via Supabase

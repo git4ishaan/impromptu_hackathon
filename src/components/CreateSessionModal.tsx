@@ -73,116 +73,148 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-neutral-900 border border-neutral-700 rounded-3xl shadow-2xl transition-all"
+        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-card rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(74,64,224,0.3)] transition-all"
       >
-        <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-neutral-800/50 sticky top-0 z-10 backdrop-blur-xl">
-          <h3 className="text-xl font-bold flex items-center gap-2">
-            <Plus className="w-5 h-5 text-blue-400" />
-            Host Study Session
-          </h3>
+        <div className="p-8 border-b border-white/60 flex justify-between items-center bg-white/40 sticky top-0 z-10 backdrop-blur-xl">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+              <Plus className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-black headline-font text-on-surface leading-tight">Host New Session</h3>
+              <p className="text-[10px] font-black text-on-surface-variant opacity-60 uppercase tracking-[0.2em] mt-1">Setup your coordination spot</p>
+            </div>
+          </div>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-neutral-700 rounded-full transition-colors"
+            className="w-12 h-12 flex items-center justify-center bg-white/60 hover:bg-white text-on-surface-variant hover:text-red-500 rounded-2xl transition-all active:scale-90"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 p-8">
+        <div className="grid md:grid-cols-2 gap-10 p-10">
           {/* Form Side */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest">1. Session Details</label>
+          <form onSubmit={handleSubmit} className="space-y-10">
+            <div className="space-y-6">
+              <label className="block text-[10px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60 headline-font">1. Session Details</label>
               
               <div className="relative">
-                <Book className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-primary/5 rounded-lg">
+                  <Book className="w-4 h-4 text-primary" />
+                </div>
                 <input
                   type="text"
                   placeholder="Subject (e.g., Physics Midterm)"
                   required
-                  className="w-full bg-neutral-950 border border-neutral-700 rounded-xl py-4 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-neutral-600"
+                  className="w-full bg-white/40 border border-white/80 rounded-2xl py-5 pl-14 pr-4 text-on-surface font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-on-surface-variant/40"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                 />
               </div>
 
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-primary/5 rounded-lg">
+                  <MapPin className="w-4 h-4 text-primary" />
+                </div>
                 <input
                   type="text"
                   placeholder="Location Name (e.g., Library F3)"
                   required
-                  className="w-full bg-neutral-950 border border-neutral-700 rounded-xl py-4 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-neutral-600"
+                  className="w-full bg-white/40 border border-white/80 rounded-2xl py-5 pl-14 pr-4 text-on-surface font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-on-surface-variant/40"
                   value={locationName}
                   onChange={(e) => setLocationName(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="space-y-4 pt-2">
-              <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest">2. Settings</label>
+            <div className="space-y-6 pt-2">
+              <label className="block text-[10px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60 headline-font">2. Settings</label>
               <div className="grid grid-cols-2 gap-4">
                 <div 
                   onClick={() => setIsPrivate(!isPrivate)}
-                  className={`p-4 rounded-xl border border-neutral-700 flex flex-col justify-center cursor-pointer transition-all ${isPrivate ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-neutral-800'}`}
+                  className={`p-5 rounded-3xl border transition-all relative overflow-hidden group shadow-sm ${
+                    isPrivate 
+                      ? 'bg-primary/10 border-primary/30 shadow-primary/5' 
+                      : 'bg-white/40 border-white/80 hover:bg-white/60'
+                  }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <Shield className={`w-5 h-5 ${isPrivate ? 'text-indigo-400' : 'text-neutral-500'}`} />
-                    <div className={`w-8 h-4 rounded-full flex items-center p-0.5 transition-colors ${isPrivate ? 'bg-indigo-500' : 'bg-neutral-700'}`}>
-                      <div className={`w-3 h-3 bg-white rounded-full shadow transform transition-transform ${isPrivate ? 'translate-x-4' : 'translate-x-0'}`} />
+                  <div className="flex items-center justify-between mb-3 relative z-10">
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isPrivate ? 'bg-primary/20 text-primary' : 'bg-on-surface-variant/5 text-on-surface-variant'}`}>
+                      <Shield className="w-4 h-4" />
+                    </div>
+                    <div className={`w-10 h-5 rounded-full flex items-center p-1 transition-all ${isPrivate ? 'bg-primary' : 'bg-on-surface-variant/20'}`}>
+                      <div className={`w-3 h-3 bg-white rounded-full shadow-md transition-all ${isPrivate ? 'translate-x-5' : 'translate-x-0'}`} />
                     </div>
                   </div>
-                  <p className={`font-bold text-sm ${isPrivate ? 'text-indigo-300' : 'text-neutral-300'}`}>Private</p>
-                  <p className="text-[10px] text-neutral-500 mt-1">Host approval required</p>
+                  <p className={`font-black text-sm headline-font ${isPrivate ? 'text-primary' : 'text-on-surface'} relative z-10`}>Private</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant opacity-60 mt-1 uppercase tracking-widest relative z-10">Host Approval Required</p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-neutral-700 bg-neutral-800 flex flex-col justify-center">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Clock className="w-5 h-5 text-neutral-500" />
+                <div className="p-5 rounded-3xl border border-white/80 bg-white/40 flex flex-col justify-center shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-xl bg-on-surface-variant/5 text-on-surface-variant flex items-center justify-center">
+                      <Clock className="w-4 h-4" />
+                    </div>
                   </div>
                   <select
-                    className="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer"
+                    className="bg-transparent text-sm font-black text-on-surface headline-font focus:outline-none cursor-pointer uppercase tracking-wide"
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(Number(e.target.value))}
                   >
-                    <option value={30} className="bg-neutral-900">30 Minutes</option>
-                    <option value={60} className="bg-neutral-900">1 Hour</option>
-                    <option value={120} className="bg-neutral-900">2 Hours</option>
-                    <option value={180} className="bg-neutral-900">3 Hours</option>
+                    <option value={30}>30 Minutes</option>
+                    <option value={60}>1 Hour</option>
+                    <option value={120}>2 Hours</option>
+                    <option value={180}>3 Hours</option>
                   </select>
-                  <p className="text-[10px] text-neutral-500 mt-1">Expected occupancy</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant opacity-60 mt-1 uppercase tracking-widest">Expected Time</p>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4 pt-4">
-              <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest">3. Confirmation</label>
+            <div className="space-y-6 pt-4">
               {error && (
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-600 text-xs font-bold headline-font"
+                >
                   {error}
-                </div>
+                </motion.div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all transform active:scale-95 disabled:opacity-50 shadow-xl shadow-blue-500/10"
+                className="w-full tonal-gradient-btn font-black py-5 rounded-[1.5rem] flex items-center justify-center gap-3 transition-all headline-font shadow-xl shadow-primary/20 active:scale-[0.97] disabled:opacity-50 uppercase tracking-[0.2em] text-sm"
               >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Launch Session'}
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                  <>
+                    <Plus className="w-5 h-5" />
+                    Launch Session
+                  </>
+                )}
               </button>
             </div>
           </form>
 
           {/* Map Side */}
-          <div className="space-y-4">
-            <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest flex items-center gap-2">
+          <div className="space-y-6">
+            <label className="block text-[10px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60 headline-font flex items-center gap-2">
               <MousePointer2 className="w-3 h-3" />
-              Pin Exact Seat
+              Pin Exact Location
             </label>
-            <SeatMapper 
-              onSelect={setCoords} 
-              selectedCoords={coords} 
-            />
+            <div className="p-1 bg-white ring-1 ring-white/60 rounded-[2.5rem] shadow-xl overflow-hidden relative group">
+              <SeatMapper 
+                onSelect={setCoords} 
+                selectedCoords={coords} 
+              />
+              {!coords && (
+                <div className="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg pointer-events-none animate-bounce uppercase tracking-widest">
+                  Tap to Pin Seat
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </motion.div>

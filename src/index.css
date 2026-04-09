@@ -1,14 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  /* Ethereal Palette Tokens */
+  --primary: #4a40e0;
+  --primary-container: #9795ff;
+  --secondary: #8126cf;
+  --secondary-container: #e5c6ff;
+  --tertiary: #00628c;
+  --tertiary-container: #40bbff;
+  --background: #f5f7f9;
+  --on-surface: #2c2f31;
+  --surface-variant: #d9dde0;
+  --outline-variant: #abadaf;
+  
+  --headline-font: 'Plus Jakarta Sans', sans-serif;
+  --body-font: 'Inter', sans-serif;
+
+  color-scheme: light;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
-  background-color: #171717; /* neutral-900 */
+  background-color: var(--background);
+  color: var(--on-surface);
+  font-family: var(--body-font);
+  overflow-x: hidden;
+}
+
+.headline-font {
+  font-family: var(--headline-font);
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(74, 64, 224, 0.08);
+}
+
+.tonal-gradient-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+  color: white;
+}
+
+.progress-gradient {
+  background: linear-gradient(90deg, var(--tertiary-container) 0%, var(--primary) 100%);
+}
+
+/* Ethereal Background Blobs */
+.bg-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background-color: var(--background);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  animation: blob-float 20s infinite alternate;
+}
+
+.blob-1 {
+  top: -10%;
+  left: -5%;
+  width: 50vw;
+  height: 50vw;
+  background-color: var(--primary);
+  animation-duration: 25s;
+}
+
+.blob-2 {
+  top: 30%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background-color: var(--secondary);
+  animation-duration: 30s;
+}
+
+.blob-3 {
+  bottom: -10%;
+  left: 20%;
+  width: 40vw;
+  height: 40vw;
+  background-color: var(--tertiary);
+  animation-duration: 22s;
+}
+
+@keyframes blob-float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, 5%) scale(1.1); }
+}
+
+/* Custom Scrollbar for Glass Aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(74, 64, 224, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 64, 224, 0.2);
 }
