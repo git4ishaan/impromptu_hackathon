@@ -204,7 +204,7 @@ export const LiveWorkspace: React.FC<LiveWorkspaceProps> = ({ session, userId, o
     if (!session.duration_minutes || !session.created_at) return;
     
     const checkExpiry = () => {
-      const createdAt = new Date(session.created_at).getTime();
+      const createdAt = new Date(session.created_at!).getTime();
       const expiresAt = createdAt + (session.duration_minutes! * 60 * 1000);
       const now = Date.now();
       
