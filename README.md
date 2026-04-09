@@ -1,73 +1,27 @@
-# React + TypeScript + Vite
+# StudySpot MIT-WPU
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Real-time campus coordination hub for students. Built for the MIT-WPU Hackathon.
 
-Currently, two official plugins are available:
+## Features
+- **Real-time Session Feed**: See who is studying what and where.
+- **SeatMapper**: Interactive library blueprint with pinned session locations.
+- **Live Workspaces**: Shared task lists, host moderation, and people tracking.
+- **AI Study Tutor**: Integrated Groq (Llama 3.1) for roadmaps, explanations, and exam prep.
+- **Resource Stash**: Shared file library with auto-AI scanning for PDFs, Word docs, and text.
+- **Access Control**: Public and Private sessions with host approval logic.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+- **Frontend**: React + TypeScript + Vite + TailwindCSS
+- **Backend**: Supabase (Auth, Postgres, Realtime, Storage)
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **LLM**: Groq (Llama 3.1 8B Instant)
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Getting Started
+1. Clone the repo
+2. `npm install`
+3. Create `.env.local` with:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+   - `VITE_RANDOM_HACK_KEY` (Groq API Key)
+4. `npm run dev`
