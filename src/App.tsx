@@ -233,7 +233,6 @@ function App() {
                 Sign Out
               </button>
             </div>
-          </div>
         </header>
 
         {/* Full-page session workspace */}
@@ -344,7 +343,6 @@ function App() {
               Sign Out
             </button>
           </motion.div>
-        </div>
       </header>
 
       <main className="max-w-6xl mx-auto p-6 grid gap-8 md:grid-cols-12">

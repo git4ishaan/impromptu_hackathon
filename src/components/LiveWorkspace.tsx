@@ -860,21 +860,9 @@ Rules:
         </div>
       </main>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6 z-[70] flex gap-4">
-        <button className="flex-1 tonal-gradient-btn py-5 rounded-[2rem] font-black headline-font shadow-2xl shadow-primary/30 active:scale-95 transition-all flex items-center justify-center gap-3 uppercase tracking-[0.2em] group">
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Sparkles className="w-4 h-4" />
-          </div>
-          Join Group Voice
-        </button>
-        <button className="w-20 h-20 bg-white/80 backdrop-blur-xl rounded-[2rem] flex items-center justify-center shadow-2xl active:scale-95 transition-all border border-white/60 text-primary">
-          <LinkIcon className="w-6 h-6" />
-        </button>
-      </div>
 
-      <footer className="p-4 border-t border-neutral-800 text-center text-[10px] text-neutral-600 uppercase tracking-widest bg-neutral-900/80 backdrop-blur-md flex items-center justify-center gap-2">
-        <Users className="w-3 h-3" /> Synced securely via Supabase
+      <footer className="p-6 border-t border-white/60 text-center text-[10px] text-on-surface-variant font-bold uppercase tracking-[0.2em] bg-white/40 backdrop-blur-md flex items-center justify-center gap-3">
+        <Users className="w-3.5 h-3.5 text-primary" /> Synced securely via Supabase (MIT-WPU Floor Plan Hub)
       </footer>
     </div>
   );
