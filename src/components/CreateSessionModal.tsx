@@ -47,59 +47,59 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div 
-        className="absolute inset-0 bg-neutral-950/90 backdrop-blur-md"
+        className="absolute inset-0 bg-on-surface/20 backdrop-blur-sm"
         onClick={onClose}
       />
       
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-neutral-900 border border-neutral-700 rounded-3xl shadow-2xl transition-all">
-        <div className="p-6 border-b border-neutral-800 flex justify-between items-center bg-neutral-800/50 sticky top-0 z-10 backdrop-blur-xl">
-          <h3 className="text-xl font-bold flex items-center gap-2">
-            <Plus className="w-5 h-5 text-blue-400" />
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-surface-container-lowest/80 backdrop-blur-md border-2 border-on-surface rounded-none shadow-hard transition-all">
+        <div className="p-6 border-b-2 border-on-surface flex justify-between items-center bg-primary-container sticky top-0 z-20">
+          <h3 className="text-2xl font-display font-black flex items-center gap-2 uppercase tracking-tighter text-on-surface">
+            <Plus className="w-8 h-8 stroke-[3]" />
             Host Study Session
           </h3>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-neutral-700 rounded-full transition-colors"
+            className="p-2 border-2 border-on-surface bg-canvas shadow-hard-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none hover:bg-error-container transition-all"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 stroke-[3] text-on-surface" />
           </button>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 p-8">
           {/* Form Side */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-4">
-              <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest">1. Session Details</label>
+              <label className="inline-block bg-surface-container-highest border-2 border-on-surface px-3 py-1 shadow-hard-sm text-xs font-black text-on-surface uppercase tracking-widest">1. Session Details</label>
               
-              <div className="relative">
-                <Book className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <div className="relative mt-2">
+                <Book className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant stroke-[3]" />
                 <input
                   type="text"
                   placeholder="Subject (e.g., Physics Midterm)"
                   required
-                  className="w-full bg-neutral-950 border border-neutral-700 rounded-xl py-4 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-neutral-600"
+                  className="w-full bg-canvas border-2 border-on-surface py-4 pl-11 pr-4 text-on-surface font-bold focus:outline-none focus:bg-primary-fixed focus:shadow-hard-sm transition-all placeholder:text-on-surface-variant"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                 />
               </div>
 
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant stroke-[3]" />
                 <input
                   type="text"
                   placeholder="Location Name (e.g., Library F3)"
                   required
-                  className="w-full bg-neutral-950 border border-neutral-700 rounded-xl py-4 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-neutral-600"
+                  className="w-full bg-canvas border-2 border-on-surface py-4 pl-11 pr-4 text-on-surface font-bold focus:outline-none focus:bg-primary-fixed focus:shadow-hard-sm transition-all placeholder:text-on-surface-variant"
                   value={locationName}
                   onChange={(e) => setLocationName(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="space-y-4 pt-4">
-              <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest">2. Confirmation</label>
+            <div className="space-y-4 pt-4 border-t-2 border-on-surface">
+              <label className="inline-block bg-surface-container-highest border-2 border-on-surface px-3 py-1 shadow-hard-sm text-xs font-black text-on-surface uppercase tracking-widest">2. Confirmation</label>
               {error && (
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm">
+                <div className="p-4 bg-error-container border-2 border-on-surface text-on-surface font-bold text-sm shadow-hard-sm mt-2">
                   {error}
                 </div>
               )}
@@ -107,7 +107,7 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all transform active:scale-95 disabled:opacity-50 shadow-xl shadow-blue-500/10"
+                className="w-full bg-primary-container border-2 border-on-surface text-on-primary-fixed font-black uppercase tracking-widest py-4 flex items-center justify-center gap-2 transition-transform hover:-translate-y-1 active:translate-y-1 active:translate-x-1 active:shadow-none disabled:opacity-50 shadow-hard mt-4"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Launch Session'}
               </button>
@@ -116,14 +116,16 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
 
           {/* Map Side */}
           <div className="space-y-4">
-            <label className="block text-xs font-black text-neutral-500 uppercase tracking-widest flex items-center gap-2">
-              <MousePointer2 className="w-3 h-3" />
+            <label className="inline-block bg-surface-container-highest border-2 border-on-surface px-3 py-1 shadow-hard-sm text-xs font-black text-on-surface uppercase tracking-widest flex w-fit items-center gap-2">
+              <MousePointer2 className="w-4 h-4 stroke-[3]" />
               Pin Exact Seat
             </label>
-            <SeatMapper 
-              onSelect={setCoords} 
-              selectedCoords={coords} 
-            />
+            <div className="mt-2">
+              <SeatMapper 
+                onSelect={setCoords} 
+                selectedCoords={coords} 
+              />
+            </div>
           </div>
         </div>
       </div>

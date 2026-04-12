@@ -5,7 +5,7 @@ import { SessionFeed } from './components/SessionFeed';
 import { CreateSessionModal } from './components/CreateSessionModal';
 import { LiveWorkspace } from './components/LiveWorkspace';
 import { SeatMapper } from './components/SeatMapper';
-import { MapPin, Users, CheckSquare, LogOut, Loader2, Plus, Sparkles } from 'lucide-react';
+import { Users, LogOut, Loader2, Plus, Sparkles } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -55,23 +55,23 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-900 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <Loader2 className="w-10 h-10 text-primary animate-spin" />
       </div>
     );
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-neutral-900 text-white p-8 font-sans flex flex-col items-center justify-center text-center">
-        <header className="mb-8">
-          <div className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-emerald-500 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Users className="w-10 h-10 text-white" />
+      <div className="min-h-screen bg-canvas text-on-surface font-body flex flex-col items-center justify-center text-center p-8">
+        <header className="mb-12">
+          <div className="w-24 h-24 bg-primary-container border-2 border-on-surface shadow-hard mx-auto mb-8 flex items-center justify-center transition-transform hover:-translate-y-1">
+            <Users className="w-12 h-12 text-on-surface" />
           </div>
-          <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
-            StudySpot MIT-WPU
+          <h1 className="text-5xl md:text-6xl font-display font-black tracking-tighter text-on-surface mb-4 -ml-2 uppercase inline-block border-b-8 border-primary-container pb-2">
+            StudySpot <br/>MIT-WPU
           </h1>
-          <p className="text-xl text-neutral-400">Join the live campus coordination hub</p>
+          <p className="text-xl font-bold text-on-surface-variant font-body uppercase tracking-wider mt-4">Join the live campus coordination hub</p>
         </header>
         <Auth />
       </div>
@@ -79,61 +79,74 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white p-6 font-sans">
-      <header className="max-w-6xl mx-auto flex justify-between items-center mb-12">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+    <div className="min-h-screen bg-canvas text-on-surface font-body p-6 md:p-12">
+      <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-6">
+        <div className="-ml-2">
+          <h1 className="text-4xl font-display font-black tracking-tighter text-on-surface uppercase border-b-4 border-on-surface inline-block pb-1">
             StudySpot
           </h1>
-          <p className="text-sm text-neutral-400">Welcome, {session.user.user_metadata.full_name || session.user.email}</p>
+          <div className="mt-4">
+            <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest bg-surface-container-high border-2 border-on-surface inline-block px-3 py-1.5 shadow-hard-sm">
+              User ID: {session.user.email}
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-sm transition-all shadow-lg shadow-blue-500/20 active:scale-95"
+            className="flex items-center gap-2 px-6 py-3 bg-primary-container border-2 border-on-surface text-on-primary-fixed font-black text-sm uppercase tracking-wider shadow-hard transition-transform hover:-translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-5 h-5 stroke-[3]" />
             Host Session
           </button>
           <button 
             onClick={handleSignOut}
-            className="flex items-center gap-2 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-xl text-sm transition-all"
+            className="flex items-center gap-2 px-4 py-3 bg-canvas border-2 border-on-surface text-on-surface font-bold text-sm uppercase tracking-wider shadow-hard transition-transform hover:bg-surface-container-low hover:-translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
           >
-            <LogOut className="w-4 h-4" />
-            Sign Out
+            <LogOut className="w-4 h-4 stroke-[3]" />
+            <span>Quit</span>
           </button>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto grid gap-8 md:grid-cols-12">
-        <div className="md:col-span-12 flex flex-col gap-8">
+      <main className="max-w-6xl mx-auto grid gap-12 md:grid-cols-12">
+        <div className="md:col-span-12">
           {/* Welcome Banner */}
-          <section className="bg-gradient-to-r from-blue-600/20 to-emerald-500/10 border border-blue-500/20 p-8 rounded-3xl flex justify-between items-center gap-8 relative overflow-hidden">
-             <div className="relative z-10">
-               <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                 <Sparkles className="w-6 h-6 text-yellow-400" />
-                 Productivity is peaking today.
+          <section className="bg-gradient-to-r from-primary to-primary-container border-2 border-on-surface p-8 shadow-hard flex justify-between items-center gap-8 relative overflow-hidden">
+             <div className="relative z-10 text-on-primary-fixed">
+               <h2 className="text-3xl md:text-4xl font-display font-black mb-4 flex items-center gap-3 uppercase tracking-tighter">
+                 <Sparkles className="w-8 h-8 text-on-surface fill-on-surface" />
+                 Productivity is peaking.
                 </h2>
-               <p className="text-neutral-400 max-w-md">There are currently {allSessions.length} active study sessions across the MIT-WPU Library floor.</p>
+               <p className="font-bold text-lg max-w-xl border-l-4 border-on-surface pl-4 bg-primary-fixed/50 py-2 border-y-2 border-r-2 shadow-hard-sm">There are currently {allSessions.length} active study sessions across the MIT-WPU Library floor.</p>
              </div>
-             <Sparkles className="absolute -right-8 -top-8 w-64 h-64 text-blue-500/10 rotate-12" />
+             <div className="absolute right-0 top-0 bottom-0 w-64 bg-on-surface opacity-10 skew-x-12 translate-x-16"></div>
           </section>
         </div>
 
-        <div className="md:col-span-7 flex flex-col gap-8">
-          <section className="bg-neutral-800/30 backdrop-blur-sm p-8 rounded-3xl border border-neutral-700/50 min-h-[400px]">
-            <SessionFeed onSelectSession={(s) => setActiveSession(s)} />
+        <div className="md:col-span-7 flex flex-col">
+          <section className="bg-surface-container-low p-8 border-2 border-on-surface shadow-hard min-h-[500px] relative">
+             <div className="absolute top-0 left-0 -mt-5 ml-4">
+                <span className="inline-block bg-surface-container-highest border-2 border-on-surface px-4 py-1 shadow-hard-sm font-display font-bold uppercase tracking-widest text-on-surface text-sm">Live Feed</span>
+             </div>
+            <div className="mt-4">
+              <SessionFeed onSelectSession={(s) => setActiveSession(s)} />
+            </div>
           </section>
         </div>
 
-        <div className="md:col-span-5 flex flex-col gap-8">
-          <section className="bg-neutral-800/30 backdrop-blur-sm p-6 rounded-3xl border border-neutral-700/50 overflow-hidden">
-            <h3 className="text-sm font-black text-neutral-500 uppercase tracking-widest mb-4">Real-time Campus Map</h3>
-            <div className="scale-75 origin-top">
-              <SeatMapper 
-                readonly 
-                pins={allSessions.map(s => ({ ...s.coordinates, label: s.subject }))} 
-              />
+        <div className="md:col-span-5 flex flex-col">
+          <section className="bg-surface-container-low border-2 border-on-surface shadow-hard relative overflow-hidden h-full min-h-[500px]">
+             <div className="absolute top-0 right-0 bg-secondary-container border-l-2 border-b-2 border-on-surface px-3 py-1 z-10">
+               <h3 className="text-xs font-black text-on-surface uppercase tracking-widest">Map Data</h3>
+             </div>
+            <div className="p-6 h-full flex flex-col">
+              <div className="flex-1 rounded-none border-2 border-on-surface bg-canvas overflow-hidden relative shadow-[inset_0_4px_8px_rgba(0,0,0,0.1)] pt-8">
+                 <SeatMapper 
+                  readonly 
+                  pins={allSessions.map(s => ({ ...s.coordinates, label: s.subject }))} 
+                 />
+              </div>
             </div>
           </section>
         </div>
@@ -153,8 +166,8 @@ function App() {
         />
       )}
 
-      <footer className="max-w-6xl mx-auto mt-16 text-center text-xs text-neutral-500 border-t border-neutral-800 pt-8 pb-4">
-        <p>&copy; 2026 StudySpot MIT-WPU Project. Innovation for campus navigability.</p>
+      <footer className="max-w-6xl mx-auto mt-24 text-center text-xs font-bold text-on-surface-variant uppercase tracking-widest border-t-2 border-on-surface pt-8 pb-8">
+        <p>StudySpot MIT-WPU &bull; Kinetic Workspace Protocol 2026</p>
       </footer>
     </div>
   );
