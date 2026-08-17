@@ -29,7 +29,29 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
     setError(null);
 
     try {
-      const payload: any = {
+      // Ensure profile exists in Supabase before inserting session (prevents FK error)
+      try {
+        const { data: profile } = await supabase.from('profiles').select('id').eq('id', userId).maybeSingle();
+        if (!profile) {
+          await supabase.from('profiles').upsert({
+            id: userId,
+            full_name: 'MIT-WPU Student',
+          });
+        }
+      } catch (profileErr) {
+        console.warn('Profile check warning:', profileErr);
+      }
+
+      interface SessionPayload {
+        subject: string;
+        location_name: string;
+        host_id: string;
+        coordinates: { x: number; y: number };
+        is_private?: boolean;
+        duration_minutes?: number;
+      }
+
+      const payload: SessionPayload = {
         subject,
         location_name: locationName,
         host_id: userId,
@@ -52,8 +74,9 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
 
       if (insertError) throw insertError;
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'Failed to create session');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to create session';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -73,23 +96,23 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-card rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(74,64,224,0.3)] transition-all"
+        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-slate-900 border border-slate-700/80 rounded-[2.5rem] shadow-2xl shadow-black/80 transition-all text-slate-100"
       >
-        <div className="p-8 border-b border-white/60 flex justify-between items-center bg-white/40 sticky top-0 z-10 backdrop-blur-xl">
+        <div className="p-6 sm:p-8 border-b border-slate-800 flex justify-between items-center bg-slate-950/80 sticky top-0 z-10 backdrop-blur-xl">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
               <Plus className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-2xl font-black headline-font text-on-surface leading-tight">Host New Session</h3>
-              <p className="text-[10px] font-black text-on-surface-variant opacity-60 uppercase tracking-[0.2em] mt-1">Setup your coordination spot</p>
+              <h3 className="text-xl sm:text-2xl font-black headline-font text-white leading-tight">Host New Session</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">Setup your campus coordination spot</p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="w-12 h-12 flex items-center justify-center bg-white/60 hover:bg-white text-on-surface-variant hover:text-red-500 rounded-2xl transition-all active:scale-90"
+            className="w-10 h-10 flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-red-400 rounded-xl transition-all active:scale-90"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -99,75 +122,120 @@ export const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ onClose,
             <div className="space-y-6">
               <label className="block text-[10px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60 headline-font">1. Session Details</label>
               
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-primary/5 rounded-lg">
-                  <Book className="w-4 h-4 text-primary" />
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-indigo-500/10 rounded-lg">
+                    <Book className="w-4 h-4 text-indigo-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Subject (e.g., Physics Midterm)"
+                    required
+                    className="w-full bg-slate-900/80 border border-slate-700/80 rounded-2xl py-5 pl-14 pr-4 text-slate-100 font-medium focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-500"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Subject (e.g., Physics Midterm)"
-                  required
-                  className="w-full bg-white/40 border border-white/80 rounded-2xl py-5 pl-14 pr-4 text-on-surface font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-on-surface-variant/40"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                />
+                <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                  {['Intro to ML', 'Engineering Physics', 'Thermodynamics', 'Data Structures', 'Calculus III'].map(sub => (
+                    <button
+                      key={sub}
+                      type="button"
+                      onClick={() => setSubject(sub)}
+                      className={`text-[10px] font-bold px-3 py-1 rounded-full border transition-all whitespace-nowrap ${
+                        subject === sub 
+                          ? 'bg-indigo-600 text-white border-indigo-500 shadow-sm' 
+                          : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {sub}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-primary/5 rounded-lg">
-                  <MapPin className="w-4 h-4 text-primary" />
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-indigo-500/10 rounded-lg">
+                    <MapPin className="w-4 h-4 text-indigo-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Location Name (e.g., Library F3)"
+                    required
+                    className="w-full bg-slate-900/80 border border-slate-700/80 rounded-2xl py-5 pl-14 pr-4 text-slate-100 font-medium focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-500"
+                    value={locationName}
+                    onChange={(e) => setLocationName(e.target.value)}
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Location Name (e.g., Library F3)"
-                  required
-                  className="w-full bg-white/40 border border-white/80 rounded-2xl py-5 pl-14 pr-4 text-on-surface font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-on-surface-variant/40"
-                  value={locationName}
-                  onChange={(e) => setLocationName(e.target.value)}
-                />
+                <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                  {[
+                    { name: 'F1 - Collaborative', x: 68.2, y: 45.1 },
+                    { name: 'F2 - Silent Zone', x: 22.1, y: 78.4 },
+                    { name: 'F3 - Engineering', x: 50.0, y: 55.0 },
+                    { name: 'F4 - Research Desk', x: 35.5, y: 22.8 },
+                    { name: 'Main Hall Cafe', x: 50.0, y: 15.0 },
+                  ].map(loc => (
+                    <button
+                      key={loc.name}
+                      type="button"
+                      onClick={() => {
+                        setLocationName(loc.name);
+                        setCoords({ x: loc.x, y: loc.y });
+                      }}
+                      className={`text-[10px] font-bold px-3 py-1 rounded-full border transition-all whitespace-nowrap ${
+                        locationName === loc.name 
+                          ? 'bg-indigo-600 text-white border-indigo-500 shadow-sm' 
+                          : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {loc.name}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             <div className="space-y-6 pt-2">
-              <label className="block text-[10px] font-black text-on-surface-variant uppercase tracking-[0.25em] opacity-60 headline-font">2. Settings</label>
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] headline-font">2. Settings</label>
               <div className="grid grid-cols-2 gap-4">
                 <div 
                   onClick={() => setIsPrivate(!isPrivate)}
-                  className={`p-5 rounded-3xl border transition-all relative overflow-hidden group shadow-sm ${
+                  className={`p-5 rounded-3xl border transition-all relative overflow-hidden group shadow-sm cursor-pointer ${
                     isPrivate 
-                      ? 'bg-primary/10 border-primary/30 shadow-primary/5' 
-                      : 'bg-white/40 border-white/80 hover:bg-white/60'
+                      ? 'bg-indigo-500/15 border-indigo-500/40 shadow-indigo-500/10' 
+                      : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-3 relative z-10">
-                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isPrivate ? 'bg-primary/20 text-primary' : 'bg-on-surface-variant/5 text-on-surface-variant'}`}>
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isPrivate ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-400'}`}>
                       <Shield className="w-4 h-4" />
                     </div>
-                    <div className={`w-10 h-5 rounded-full flex items-center p-1 transition-all ${isPrivate ? 'bg-primary' : 'bg-on-surface-variant/20'}`}>
+                    <div className={`w-10 h-5 rounded-full flex items-center p-1 transition-all ${isPrivate ? 'bg-indigo-600' : 'bg-slate-700'}`}>
                       <div className={`w-3 h-3 bg-white rounded-full shadow-md transition-all ${isPrivate ? 'translate-x-5' : 'translate-x-0'}`} />
                     </div>
                   </div>
-                  <p className={`font-black text-sm headline-font ${isPrivate ? 'text-primary' : 'text-on-surface'} relative z-10`}>Private</p>
-                  <p className="text-[10px] font-bold text-on-surface-variant opacity-60 mt-1 uppercase tracking-widest relative z-10">Host Approval Required</p>
+                  <p className={`font-black text-sm headline-font ${isPrivate ? 'text-indigo-400' : 'text-slate-200'} relative z-10`}>Private</p>
+                  <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest relative z-10">Host Approval Required</p>
                 </div>
 
-                <div className="p-5 rounded-3xl border border-white/80 bg-white/40 flex flex-col justify-center shadow-sm">
+                <div className="p-5 rounded-3xl border border-slate-800 bg-slate-900/80 flex flex-col justify-center shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-xl bg-on-surface-variant/5 text-on-surface-variant flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center">
                       <Clock className="w-4 h-4" />
                     </div>
                   </div>
                   <select
-                    className="bg-transparent text-sm font-black text-on-surface headline-font focus:outline-none cursor-pointer uppercase tracking-wide"
+                    className="bg-slate-900 text-sm font-black text-slate-100 headline-font focus:outline-none cursor-pointer uppercase tracking-wide border border-slate-800 rounded-lg p-1"
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(Number(e.target.value))}
                   >
                     <option value={30}>30 Minutes</option>
-                    <option value={60}>1 Hour</option>
-                    <option value={120}>2 Hours</option>
-                    <option value={180}>3 Hours</option>
+                    <option value={60}>60 Minutes (1 hr)</option>
+                    <option value={90}>90 Minutes (1.5 hr)</option>
+                    <option value={120}>120 Minutes (2 hr)</option>
+                    <option value={180}>180 Minutes (3 hr)</option>
                   </select>
-                  <p className="text-[10px] font-bold text-on-surface-variant opacity-60 mt-1 uppercase tracking-widest">Expected Time</p>
                 </div>
               </div>
             </div>

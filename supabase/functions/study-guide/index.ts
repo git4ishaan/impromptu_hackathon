@@ -53,7 +53,7 @@ Instructions:
         'Authorization': `Bearer ${groqApiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192', // Fast model perfect for simple queries
+        model: 'groq/compound-mini', // Fast, high-accuracy campus assistant model
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: query || 'What is happening on campus right now?' }
