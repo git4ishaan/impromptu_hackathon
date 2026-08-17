@@ -9,6 +9,7 @@ import { CreateSessionModal } from './components/CreateSessionModal';
 import { LiveWorkspace } from './components/LiveWorkspace';
 import { SeatMapper } from './components/SeatMapper';
 import { StudyAssistant } from './components/StudyAssistant';
+import { AboutModal } from './components/AboutModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, LogOut, Loader2, Plus, Bell, Shield, Compass } from 'lucide-react';
 import './App.css';
@@ -44,6 +45,7 @@ function App() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeNav, setActiveNav] = useState('discover');
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   // Track if user is already hosting
   const isHosting = allSessions.some(s => s.host_id === session?.user?.id);
@@ -278,6 +280,12 @@ function App() {
                 {nav.label}
               </button>
             ))}
+            <button
+              onClick={() => setIsAboutOpen(true)}
+              className="px-3 py-1.5 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10 font-bold transition-all"
+            >
+              About
+            </button>
           </nav>
         </motion.div>
 
@@ -447,6 +455,9 @@ function App() {
         )}
       </AnimatePresence>
 
+      {/* About Platform & Live URL Modal */}
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+
       {/* Premium SaaS Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-950/80 py-12 px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-500">
@@ -463,6 +474,7 @@ function App() {
             <button onClick={() => scrollToSection('sessions')} className="hover:text-white transition-colors">Sessions</button>
             <button onClick={() => scrollToSection('pulse')} className="hover:text-white transition-colors">Telemetry</button>
             <button onClick={() => scrollToSection('map')} className="hover:text-white transition-colors">Map</button>
+            <button onClick={() => setIsAboutOpen(true)} className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors">About & Live URL</button>
           </div>
         </div>
       </footer>
